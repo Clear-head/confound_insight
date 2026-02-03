@@ -27,7 +27,7 @@ class SimilarityAnalysis(models.Model):
         unique_together = [['target_compound', 'similar_compound']]
         constraints = [
             models.CheckConstraint(
-                check=~models.Q(target_compound=models.F('similar_compound')),
+                condition=~models.Q(target_compound=models.F('similar_compound')),
                 name='no_self_similarity'
             )
         ]
