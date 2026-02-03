@@ -1,16 +1,20 @@
 [project]
-name = "confound-insight"
+name = "confound_insight"
 version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.13"
 dependencies = [
     "apache-airflow>=3.1.6",
+    "celery>=5.6.2",
     "django>=6.0.1",
+    "django-cors-headers>=4.9.0",
     "django-environ>=0.12.0",
     "djangorestframework>=3.16.1",
     "djangorestframework-stubs>=3.16.7",
     "drf-spectacular>=0.29.0",
+    "httpx>=0.28.1",
     "psycopg[binary]>=3.3.2",
     "rdkit>=2025.9.3",
     "redis>=7.1.0",
+    "requests>=2.32.5",
 ]
