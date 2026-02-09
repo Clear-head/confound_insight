@@ -30,6 +30,17 @@ class Compound(models.Model):
 
     class Meta:
         db_table = 'compounds'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['standard_name'],
+                name='unique_compound_standard_name'
+            ),
+            models.UniqueConstraint(
+                fields=['cid'],
+                name='unique_compound_cid',
+                condition=models.Q(cid__isnull=False)
+            )
+        ]
 
     def __str__(self):
         return f"{self.standard_name} (CID:{self.cid or 'N/A'})"

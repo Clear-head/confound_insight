@@ -13,6 +13,12 @@ class Product(models.Model):
 
     class Meta:
         db_table = 'products'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['permit_number'],
+                name='unique_product_permit_number'
+            )
+        ]
 
     def __str__(self):
         return self.product_name
@@ -38,9 +44,11 @@ class ProductIngredient(models.Model):
     compound = models.ForeignKey('compounds.Compound', on_delete=models.SET_NULL,
                                  null=True, blank=True, related_name='products')
 
-    raw_ingredient_name = models.CharField(max_length=255)
-    content = models.CharField(max_length=100, blank=True)
-    unit = models.CharField(max_length=20, blank=True)
+    #   일단 영어로 긁어오니깐 패스
+    # raw_ingredient_name = models.CharField(max_length=255)
+
+    english_name = models.CharField(max_length=255, blank=True,
+                                    help_text="MFDS MAIN_INGR_ENG - PubChem 조회용")
     is_main_active = models.BooleanField(default=True)
 
     normalization_status = models.CharField(max_length=20, choices=STATUS_CHOICES,
@@ -52,7 +60,12 @@ class ProductIngredient(models.Model):
 
     class Meta:
         db_table = 'product_ingredients'
-        unique_together = [['product', 'raw_ingredient_name']]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['product', 'english_name'],
+                name='unique_product_ingredient'
+            )
+        ]
 
     def __str__(self):
-        return f"{self.product.product_name} - {self.raw_ingredient_name}"
+        return f"{self.product.product_name}"

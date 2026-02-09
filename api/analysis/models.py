@@ -16,7 +16,8 @@ class SimilarityAnalysis(models.Model):
     )
 
     similarity_score = models.FloatField(
-        validators=[MinValueValidator(0.0), MaxValueValidator(1.0)]
+        validators=[MinValueValidator(0.0), MaxValueValidator(1.0)],
+        db_index=True,
     )
 
     analysis_date = models.DateTimeField(auto_now_add=True)
@@ -24,8 +25,11 @@ class SimilarityAnalysis(models.Model):
 
     class Meta:
         db_table = 'compound_similarities'
-        unique_together = [['target_compound', 'similar_compound']]
         constraints = [
+            models.UniqueConstraint(
+                fields=['target_compound', 'similar_compound'],
+                name='unique_target_similar_compound'
+            ),
             models.CheckConstraint(
                 condition=~models.Q(target_compound=models.F('similar_compound')),
                 name='no_self_similarity'
